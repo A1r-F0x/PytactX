@@ -3,7 +3,6 @@ from PyQt5 import QtWidgets, uic, QtCore
 import sys
 import j2l.pytactx.agent as pytactx
 import auto
-agent=None
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -11,6 +10,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.password = ""
         self.nickname = ""
         self.auto=False
+        self.agent=None
         # On crée un timer pour régulièrement envoyer les requetes de l'agent au server et actualiser son état
         self.timer = QtCore.QTimer()
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
@@ -29,7 +29,6 @@ class MainWindow(QtWidgets.QMainWindow):
             Slot : onPushButtonClicked()
         """
         print("Connecting")
-        global agent
         agent = pytactx.AgentFr(
             nom=self.nickname,
             arene=self.arena,
@@ -50,50 +49,45 @@ class MainWindow(QtWidgets.QMainWindow):
         #print("Password text changed:",text) #A décommenter uniquement pour debug, pour ne pas dévoiler le mot de passe !
         self.password = text
     def onTimerUpdate(self):
-        global agent
-        if ( agent != None ):
-            agent.actualiser()
+        
+        if ( self.agent != None ):
+            self.agent.actualiser()
             if self.auto:        #quand la checkbox est cochée on rentre dans la boucle
                 auto.actualiserAgent()
             # MAJ de la ui selon l'état du robot
-            if ( agent.vie > self.ui.lifeBar.maximum() ):
-                self.ui.lifeBar.setMaximum(agent.vie)
-            self.ui.lifeBar.setValue(agent.vie)
-            self.ui.lifeLabel.setText(str(agent.vie))
-            if ( agent.vie > self.ui.ammoBar.maximum() ):
-                self.ui.ammoBar.setMaximum(agent.munitions)
-            self.ui.ammoBar.setValue(agent.munitions)
-            self.ui.ammoLabel.setText(str(agent.munitions))
+            if ( self.agent.vie > self.ui.lifeBar.maximum() ):
+                self.ui.lifeBar.setMaximum(self.agent.vie)
+            self.ui.lifeBar.setValue(self.agent.vie)
+            self.ui.lifeLabel.setText(str(self.agent.vie))
+            if ( self.agent.vie > self.ui.ammoBar.maximum() ):
+                self.ui.ammoBar.setMaximum(self.agent.munitions)
+            self.ui.ammoBar.setValue(self.agent.munitions)
+            self.ui.ammoLabel.setText(str(self.agent.munitions))
     def onUpButtonClicked(self):
-        global agent
-        agent.orienter(1)
-        agent.deplacer(0,-1)
-        agent.actualiser()
+        self.agent.orienter(1)
+        self.agent.deplacer(0,-1)
+        self.agent.actualiser()
     def onLeftButtonClicked(self):
-        global agent
-        agent.orienter(2)
-        agent.deplacer(-1,0)
-        agent.actualiser()
+        self.agent.orienter(2)
+        self.agent.deplacer(-1,0)
+        self.agent.actualiser()
     def onDownButtonClicked(self):
-        global agent
-        agent.orienter(3)
-        agent.deplacer(0,+1)
-        agent.actualiser()
+        self.agent.orienter(3)
+        self.agent.deplacer(0,+1)
+        self.agent.actualiser()
     def onRightButtonClicked(self):
-        global agent
-        agent.orienter(0)
-        agent.deplacer(+1,0)
-        agent.actualiser()
+        self.agent.orienter(0)
+        self.agent.deplacer(+1,0)
+        self.agent.actualiser()
     def onShootButtonClicked(self):
-        global agent 
-        agent.tirer(True)
-        agent.orienter(0)
-        agent.actualiser()
+        self.agent.tirer(True)
+        self.agent.orienter(0)
+        self.agent.actualiser()
     def onNotShootButtonClicked(self):
-        global agent 
-        agent.tirer(False)
-        agent.orienter(0)
-        agent.actualiser()
+         
+        self.agent.tirer(False)
+        self.agent.orienter(0)
+        self.agent.actualiser()
 
     def onAutoMode(self,isChecked):
         self.auto=isChecked

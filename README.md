@@ -1,4 +1,5 @@
 User story:
+controle un agent dans une arene de jeu 
 fonction de la page :
     -affichage de la vie et des munitions 
     -fonction de deplacement 
@@ -8,10 +9,6 @@ fonction de la page :
     
 
 
-
-
-
-    ``
 
 
 
