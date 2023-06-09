@@ -2,6 +2,7 @@ import j2l.pytactx.agent as pytactx
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 import j2l.pytactx.agent as pytactx
+import auto
 agent=None
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -9,6 +10,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.arena = "" # On créer des attributs pour sauvegarder les textes entrés jusqu'à ce que le bouton connect soit cliqué
         self.password = ""
         self.nickname = ""
+        self.auto=False
         # On crée un timer pour régulièrement envoyer les requetes de l'agent au server et actualiser son état
         self.timer = QtCore.QTimer()
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
@@ -28,7 +30,6 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         print("Connecting")
         global agent
-        self.timer.start()
         agent = pytactx.AgentFr(
             nom=self.nickname,
             arene=self.arena,
@@ -37,6 +38,8 @@ class MainWindow(QtWidgets.QMainWindow):
             url="mqtt.jusdeliens.com",
             verbosite=3
         )
+        auto.setAgent(agent)
+        self.timer.start()
     def onNicknameTextChanged(self, text):
         print("Nickname text changed:",text)
         self.nickname = text
@@ -49,8 +52,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def onTimerUpdate(self):
         global agent
         if ( agent != None ):
-            agent.orienter((agent.orientation+1)%4)
             agent.actualiser()
+            if self.auto:        #quand la checkbox est cochée on rentre dans la boucle
+                auto.actualiserAgent()
             # MAJ de la ui selon l'état du robot
             if ( agent.vie > self.ui.lifeBar.maximum() ):
                 self.ui.lifeBar.setMaximum(agent.vie)
@@ -90,6 +94,10 @@ class MainWindow(QtWidgets.QMainWindow):
         agent.tirer(False)
         agent.orienter(0)
         agent.actualiser()
+
+    def onAutoMode(self,isChecked):
+        self.auto=isChecked
+        
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()

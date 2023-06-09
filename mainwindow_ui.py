@@ -101,6 +101,9 @@ class Ui_MainWindow(object):
         self.pushButtonRight = QtWidgets.QPushButton(self.robotTab)
         self.pushButtonRight.setObjectName("pushButtonRight")
         self.gridLayout.addWidget(self.pushButtonRight, 3, 2, 1, 1)
+        self.autoMode = QtWidgets.QCheckBox(self.robotTab)
+        self.autoMode.setObjectName("autoMode")
+        self.gridLayout.addWidget(self.autoMode, 2, 0, 1, 1)
         self.formLayout.setLayout(4, QtWidgets.QFormLayout.SpanningRole, self.gridLayout)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -134,6 +137,7 @@ class Ui_MainWindow(object):
         self.pushButtonRight.pressed.connect(MainWindow.onRightButtonClicked) # type: ignore
         self.pushButtonShoot.pressed.connect(MainWindow.onShootButtonClicked) # type: ignore
         self.pushButtonStopShoot.clicked.connect(MainWindow.onNotShootButtonClicked) # type: ignore
+        self.autoMode.toggled['bool'].connect(MainWindow.onAutoMode) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -155,6 +159,7 @@ class Ui_MainWindow(object):
         self.pushButtonDown.setText(_translate("MainWindow", "bas"))
         self.pushButtonLeft.setText(_translate("MainWindow", "gauche"))
         self.pushButtonRight.setText(_translate("MainWindow", "droite"))
+        self.autoMode.setText(_translate("MainWindow", "Auto"))
         self.pushButtonShoot.setText(_translate("MainWindow", "Tirer"))
         self.pushButtonStopShoot.setText(_translate("MainWindow", "stop Tirer "))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.robotTab), _translate("MainWindow", "Robot"))

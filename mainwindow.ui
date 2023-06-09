@@ -234,6 +234,13 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="autoMode">
+            <property name="text">
+             <string>Auto</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item row="6" column="1">
@@ -434,6 +441,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>autoMode</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onAutoMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>374</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onConnectButtonClicked()</slot>
@@ -446,5 +469,6 @@
   <slot>onDownButtonClicked()</slot>
   <slot>onShootButtonClicked()</slot>
   <slot>onNotShootButtonClicked()</slot>
+  <slot>onAutoMode(bool)</slot>
  </slots>
 </ui>
